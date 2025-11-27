@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Sales Dashboard";
+}
+
+<h2 class="page-title">Sales Dashboard</h2>
+
+<div class="dashboard-row">
+
+    <div class="stat-card">
+        <div class="stat-title">Total Sales This Month</div>
+        <div class="stat-value">18</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Active Leads</div>
+        <div class="stat-value">56</div>
+    </div>
+
+    <div class="stat-card">
+        <div class="stat-title">Top Model</div>
+        <div class="stat-value">Civic</div>
+    </div>
+
+</div>
+
+<div class="aios-card mt-4">
+    <h4 class="fw-bold mb-3">Monthly Sales Trend</h4>
+
+    <canvas id="salesChart" height="120"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById("salesChart");
+
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+            datasets: [{
+                label: "Vehicle Sales",
+                data: [12, 17, 9, 22, 18, 25],
+                borderWidth: 3,
+                tension: 0.3
+            }]
+        }
+    });
+</script>

@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"] - AIOS</title>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/aios.css" />
+</head>
+
+<body>
+    <div class="layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                AIOS
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="/" class="sidebar-link">Dashboard</a>
+                <a href="/Inventory" class="sidebar-link">Inventory</a>
+                <a href="/Customers" class="sidebar-link">Customers</a>
+                <a href="/Sales/Dashboard" class="sidebar-link">Sales</a>
+                <a href="/Pricing/Suggestions" class="sidebar-link">Pricing</a>
+                <a href="/Service/Calendar" class="sidebar-link">Service</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="main">
+
+            <!-- TOP HEADER BAR -->
+            <header class="topbar">
+                <div class="topbar-right">
+                    <div class="user-badge">AS</div>
+                </div>
+            </header>
+
+            <!-- MAIN BODY -->
+            <main class="content">
+                @RenderBody()
+            </main>
+
+        </div>
+    </div>
+
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

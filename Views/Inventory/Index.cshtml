@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Inventory";
+}
+
+<h2 class="page-title">Vehicle Inventory</h2>
+
+<div class="aios-card fade-in">
+
+    <a href="/Inventory/Add" class="btn-aios">Add Vehicle</a>
+
+    <table class="aios-table mt-3">
+        <thead>
+            <tr>
+                <th>Make</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>VIN</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr onclick="location.href='/Inventory/Details'" style="cursor:pointer;">
+                <td>Honda</td>
+                <td>Civic</td>
+                <td>2020</td>
+                <td>2HGFC2F69LH012345</td>
+                <td>In Stock</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>

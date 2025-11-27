@@ -1,0 +1,221 @@
+/* =======================================================
+   AIOS — Enterprise Sidebar Layout
+   Modern, clean, dealership OS style
+   ======================================================= */
+
+body {
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    background: #f5f7fa;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+/* -------------------------------------------------------
+   GRID LAYOUT
+------------------------------------------------------- */
+.layout {
+    display: flex;
+    height: 100vh;
+}
+
+/* -------------------------------------------------------
+   SIDEBAR
+------------------------------------------------------- */
+.sidebar {
+    width: 240px;
+    background: #1f1f24;
+    color: #e5e5e7;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.sidebar-header {
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    padding-bottom: 25px;
+    color: #4da3ff;
+    letter-spacing: 1px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-link {
+    padding: 12px 20px;
+    color: #cfcfd4;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: 0.2s;
+    border-left: 3px solid transparent;
+}
+
+    .sidebar-link:hover {
+        background: #29292f;
+        color: #ffffff;
+        border-left: 3px solid #4da3ff;
+    }
+
+    .sidebar-link.active {
+        background: #2f2f36;
+        border-left: 3px solid #4da3ff;
+        color: #fff;
+    }
+
+/* -------------------------------------------------------
+   MAIN AREA
+------------------------------------------------------- */
+.main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* -------------------------------------------------------
+   TOP HEADER BAR
+------------------------------------------------------- */
+.topbar {
+    height: 60px;
+    background: #ffffff;
+    border-bottom: 1px solid #dcdcdc;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 20px;
+}
+
+.user-badge {
+    width: 38px;
+    height: 38px;
+    background: #4da3ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* -------------------------------------------------------
+   CONTENT AREA
+------------------------------------------------------- */
+.content {
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* -------------------------------------------------------
+   CARDS
+------------------------------------------------------- */
+.aios-card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid #e5e5e5;
+    margin-bottom: 20px;
+}
+
+.page-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* -------------------------------------------------------
+   BUTTONS
+------------------------------------------------------- */
+.btn-aios {
+    background: #4da3ff;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+    .btn-aios:hover {
+        background: #2f89e4;
+    }
+
+.btn-aios-secondary {
+    background: #efefef;
+    color: #333;
+    padding: 10px 16px;
+    border-radius: 6px;
+    border: 1px solid #dcdcdc;
+}
+
+    .btn-aios-secondary:hover {
+        background: #e5e5e5;
+    }
+
+/* -------------------------------------------------------
+   INPUTS
+------------------------------------------------------- */
+.aios-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+    .aios-input:focus {
+        border-color: #4da3ff;
+        box-shadow: 0 0 4px rgba(77,163,255,0.3);
+        outline: none;
+    }
+
+/* -------------------------------------------------------
+   TABLES
+------------------------------------------------------- */
+.aios-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .aios-table th {
+        background: #4da3ff;
+        color: white;
+        padding: 10px;
+        border: none;
+        font-weight: 600;
+    }
+
+    .aios-table td {
+        padding: 12px;
+        border-bottom: 1px solid #e1e1e3;
+        background: #ffffff;
+    }
+
+    .aios-table tr:hover td {
+        background: #f0f7ff;
+    }
+
+/* -------------------------------------------------------
+   DASHBOARD GRID
+------------------------------------------------------- */
+.dashboard-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    border-radius: 12px;
+    padding: 20px;
+    background: white;
+    border: 1px solid #e4e4e4;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.stat-title {
+}

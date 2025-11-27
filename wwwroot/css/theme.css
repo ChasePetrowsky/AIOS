@@ -1,0 +1,52 @@
+﻿/* Smooth fade-in for pages */
+.fade-in {
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Card hover lift */
+.aios-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: 0.2s ease;
+}
+
+/* Table styling */
+.aios-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .aios-table th {
+        background: #2d6cdf;
+        color: white;
+        padding: 10px;
+        border: none;
+    }
+
+    .aios-table td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .aios-table tr:hover {
+        background-color: #f1f3f9;
+    }
+
+/* Rounded profile images */
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}

@@ -1,0 +1,372 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Scheduling</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        .aios-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px;
+        }
+
+        #calendar {
+            margin-top: 15px;
+        }
+
+        .fc-toolbar-title {
+            font-weight: 600;
+            font-size: 1.4rem;
+        }
+
+        .fc-event {
+            border-radius: 6px;
+            padding: 3px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-aios {
+            background-color: #4da3ff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+            .btn-aios:hover {
+                background-color: #3a8ee6;
+                color: white;
+            }
+
+        .btn-aios-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+            .btn-aios-secondary:hover {
+                background-color: #5a6268;
+            }
+
+        .btn-danger {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <h2 class="page-title">Service Scheduling</h2>
+
+        <div class="aios-card">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div></div>
+                <button type="button" class="btn-aios" id="createAppointmentBtn">+ Create Appointment</button>
+            </div>
+            <div id="calendar"></div>
+        </div>
+    </div>
+
+    <!-- Bootstrap modal for editing/creating appointments -->
+    <div class="modal fade" id="editEventModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Edit Appointment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="editEventId">
+
+                    <div class="mb-3">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="editEventCustomer" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Service Type</label>
+                        <input type="text" class="form-control" id="editEventTitle" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" id="editEventDescription" rows="3" placeholder="Additional notes or details..."></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Start Time</label>
+                        <input type="datetime-local" class="form-control" id="editEventStart" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">End Time</label>
+                        <input type="datetime-local" class="form-control" id="editEventEnd" required>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="deleteEventBtn" style="display: none;">Delete</button>
+                    <button type="button" class="btn-aios-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn-aios" id="saveEventBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarEl = document.getElementById('calendar');
+            let editModal = new bootstrap.Modal(document.getElementById('editEventModal'));
+
+            let calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek',
+                height: 750,
+                selectable: true,
+                editable: true,
+
+                slotMinTime: "08:00:00",
+                slotMaxTime: "17:00:00",
+
+                allDaySlot: false,
+
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'timeGridDay,timeGridWeek,dayGridMonth'
+                },
+
+                select: function (info) {
+                    // Fixed business hours validation
+                    if (info.start.getHours() < 8 ||
+                        info.end.getHours() > 17 ||
+                        (info.end.getHours() === 17 && info.end.getMinutes() > 0)) {
+                        alert("Appointments must be between 8 AM and 5 PM.");
+                        return;
+                    }
+
+                    // Open modal for creating appointment
+                    let startLocal = new Date(info.start.getTime() - info.start.getTimezoneOffset() * 60000);
+                    let endLocal = new Date(info.end.getTime() - info.end.getTimezoneOffset() * 60000);
+
+                    document.getElementById("editEventId").value = '';
+                    document.getElementById("editEventCustomer").value = '';
+                    document.getElementById("editEventTitle").value = '';
+                    document.getElementById("editEventDescription").value = '';
+                    document.getElementById("editEventStart").value = startLocal.toISOString().slice(0, 16);
+                    document.getElementById("editEventEnd").value = endLocal.toISOString().slice(0, 16);
+
+                    document.getElementById("modalTitle").textContent = "Create Appointment";
+                    document.getElementById("deleteEventBtn").style.display = "none";
+                    document.getElementById("saveEventBtn").textContent = "Create";
+
+                    editModal.show();
+                    calendar.unselect();
+                },
+
+                eventClick: function (info) {
+                    let event = info.event;
+
+                    // Fill modal fields
+                    document.getElementById("editEventId").value = event.id;
+                    document.getElementById("editEventCustomer").value = event.extendedProps.customer || '';
+                    document.getElementById("editEventTitle").value = event.title;
+                    document.getElementById("editEventDescription").value = event.extendedProps.description || '';
+
+                    // Convert to local time properly
+                    let startDate = new Date(event.start.getTime() - event.start.getTimezoneOffset() * 60000);
+                    let endDate = event.end ? new Date(event.end.getTime() - event.end.getTimezoneOffset() * 60000) : startDate;
+
+                    document.getElementById("editEventStart").value = startDate.toISOString().slice(0, 16);
+                    document.getElementById("editEventEnd").value = endDate.toISOString().slice(0, 16);
+
+                    document.getElementById("modalTitle").textContent = "Edit Appointment";
+                    document.getElementById("deleteEventBtn").style.display = "inline-block";
+                    document.getElementById("saveEventBtn").textContent = "Save Changes";
+
+                    editModal.show();
+                },
+
+                eventResize: function (info) {
+                    let end = info.event.end || info.event.start;
+                    if (info.event.start.getHours() < 8 ||
+                        end.getHours() > 17 ||
+                        (end.getHours() === 17 && end.getMinutes() > 0)) {
+                        alert("Resize must stay between 8 AM and 5 PM.");
+                        info.revert();
+                    }
+                },
+
+                eventDrop: function (info) {
+                    let end = info.event.end || info.event.start;
+                    if (info.event.start.getHours() < 8 ||
+                        end.getHours() > 17 ||
+                        (end.getHours() === 17 && end.getMinutes() > 0)) {
+                        alert("Appointments must stay between 8 AM and 5 PM.");
+                        info.revert();
+                    }
+                },
+
+                events: [
+                    {
+                        id: '1',
+                        title: "Oil Change",
+                        start: new Date().toISOString().split("T")[0] + "T10:00",
+                        end: new Date().toISOString().split("T")[0] + "T11:00",
+                        backgroundColor: "#4da3ff",
+                        borderColor: "#4da3ff",
+                        extendedProps: {
+                            customer: "Sarah Lopez",
+                            description: "Regular oil change and filter replacement"
+                        }
+                    }
+                ]
+            });
+
+            calendar.render();
+
+            // Create new appointment button
+            document.getElementById("createAppointmentBtn").onclick = function () {
+                // Set default times (next hour, 1 hour duration)
+                let now = new Date();
+                now.setMinutes(0, 0, 0);
+                now.setHours(now.getHours() + 1);
+
+                let start = new Date(now);
+                let end = new Date(now);
+                end.setHours(end.getHours() + 1);
+
+                // Ensure within business hours
+                if (start.getHours() < 8) {
+                    start.setHours(8, 0, 0, 0);
+                    end.setHours(9, 0, 0, 0);
+                } else if (start.getHours() >= 16) {
+                    start.setHours(16, 0, 0, 0);
+                    end.setHours(17, 0, 0, 0);
+                }
+
+                let startLocal = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
+                let endLocal = new Date(end.getTime() - end.getTimezoneOffset() * 60000);
+
+                document.getElementById("editEventId").value = '';
+                document.getElementById("editEventCustomer").value = '';
+                document.getElementById("editEventTitle").value = '';
+                document.getElementById("editEventDescription").value = '';
+                document.getElementById("editEventStart").value = startLocal.toISOString().slice(0, 16);
+                document.getElementById("editEventEnd").value = endLocal.toISOString().slice(0, 16);
+
+                document.getElementById("modalTitle").textContent = "Create Appointment";
+                document.getElementById("deleteEventBtn").style.display = "none";
+                document.getElementById("saveEventBtn").textContent = "Create";
+
+                editModal.show();
+            };
+
+            // Save changes from modal
+            document.getElementById("saveEventBtn").onclick = function () {
+                let id = document.getElementById("editEventId").value;
+                let customer = document.getElementById("editEventCustomer").value;
+                let title = document.getElementById("editEventTitle").value;
+                let description = document.getElementById("editEventDescription").value;
+                let start = document.getElementById("editEventStart").value;
+                let end = document.getElementById("editEventEnd").value;
+
+                if (!customer || !title || !start || !end) {
+                    alert("Please fill in all required fields.");
+                    return;
+                }
+
+                // Fixed business hours validation
+                let startDate = new Date(start);
+                let endDate = new Date(end);
+
+                if (startDate.getHours() < 8 ||
+                    endDate.getHours() > 17 ||
+                    (endDate.getHours() === 17 && endDate.getMinutes() > 0)) {
+                    alert("Appointments must be between 8 AM and 5 PM.");
+                    return;
+                }
+
+                if (startDate >= endDate) {
+                    alert("End time must be after start time.");
+                    return;
+                }
+
+                if (id) {
+                    // Edit existing event
+                    let event = calendar.getEventById(id);
+                    if (!event) {
+                        alert("Event not found.");
+                        return;
+                    }
+                    event.setProp("title", title);
+                    event.setStart(start);
+                    event.setEnd(end);
+                    event.setExtendedProp("customer", customer);
+                    event.setExtendedProp("description", description);
+                } else {
+                    // Create new event
+                    calendar.addEvent({
+                        id: Date.now().toString(),
+                        title: title,
+                        start: start,
+                        end: end,
+                        extendedProps: {
+                            customer: customer,
+                            description: description
+                        }
+                    });
+                }
+
+                editModal.hide();
+            };
+
+            // Delete event
+            document.getElementById("deleteEventBtn").onclick = function () {
+                if (confirm("Delete this appointment?")) {
+                    let id = document.getElementById("editEventId").value;
+                    let event = calendar.getEventById(id);
+                    if (event) {
+                        event.remove();
+                    }
+                    editModal.hide();
+                }
+            };
+        });
+    </script>
+</body>
+</html>
