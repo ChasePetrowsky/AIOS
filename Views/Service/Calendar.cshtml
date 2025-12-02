@@ -7,7 +7,8 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <!-- FullCalendar CSS -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.min.css" rel="stylesheet" />
 
@@ -80,22 +81,170 @@
             border-radius: 6px;
             font-weight: 500;
         }
+
+        .customer-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+            .customer-info strong {
+                color: #495057;
+            }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        .toast {
+            min-width: 350px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+
+        .toast-success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast-error {
+            border-left: 4px solid #dc3545;
+        }
+
+        .toast-warning {
+            border-left: 4px solid #ffc107;
+        }
+
+        /* Custom Confirm Dialog */
+        .custom-confirm-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .custom-confirm-dialog {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            max-width: 400px;
+            text-align: center;
+        }
+
+            .custom-confirm-dialog h5 {
+                margin-bottom: 20px;
+                color: #333;
+                font-weight: 600;
+            }
+
+        .custom-confirm-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+            .custom-confirm-buttons button {
+                padding: 10px 24px;
+                border: none;
+                border-radius: 6px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+        .confirm-yes {
+            background-color: #dc3545;
+            color: white;
+        }
+
+            .confirm-yes:hover {
+                background-color: #c82333;
+            }
+
+        .confirm-no {
+            background-color: #6c757d;
+            color: white;
+        }
+
+            .confirm-no:hover {
+                background-color: #5a6268;
+            }
     </style>
 </head>
 <body>
+    <!-- Custom Confirm Dialog -->
+    <div class="custom-confirm-overlay" id="confirmOverlay">
+        <div class="custom-confirm-dialog">
+            <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3rem;"></i>
+            <h5>Delete Appointment?</h5>
+            <p>Are you sure you want to delete this appointment? This action cannot be undone.</p>
+            <div class="custom-confirm-buttons">
+                <button class="confirm-no" id="confirmNo">Cancel</button>
+                <button class="confirm-yes" id="confirmYes">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <div id="successToast" class="toast toast-success align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <span id="successMessage"></span>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <div id="errorToast" class="toast toast-error align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-exclamation-circle-fill text-danger me-2"></i>
+                    <span id="errorMessage"></span>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+
+        <div id="warningToast" class="toast toast-warning align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
+                    <span id="warningMessage"></span>
+                </div>
+                <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid">
         <h2 class="page-title">Service Scheduling</h2>
 
         <div class="aios-card">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div></div>
-                <button type="button" class="btn-aios" id="createAppointmentBtn">+ Create Appointment</button>
+                <button type="button" class="btn-aios" id="createAppointmentBtn">
+                    <i class="bi bi-plus-circle"></i> Create Appointment
+                </button>
             </div>
             <div id="calendar"></div>
         </div>
     </div>
 
-    <!-- Bootstrap modal for editing/creating appointments -->
+    <!-- Modal for editing/creating appointments -->
     <div class="modal fade" id="editEventModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -108,35 +257,57 @@
                     <input type="hidden" id="editEventId">
 
                     <div class="mb-3">
-                        <label class="form-label">Customer Name</label>
-                        <input type="text" class="form-control" id="editEventCustomer" required>
+                        <label class="form-label fw-bold">Select Customer *</label>
+                        <select class="form-select" id="editEventCustomer" required>
+                            <option value="">-- Select a customer --</option>
+                        </select>
+                    </div>
+
+                    <div id="selectedCustomerInfo" class="customer-info" style="display:none;">
+                        <strong>Customer Details:</strong><br>
+                        <span id="customerDetails"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Service Type</label>
-                        <input type="text" class="form-control" id="editEventTitle" required>
+                        <label class="form-label fw-bold">Service Type *</label>
+                        <select class="form-select" id="editEventTitle" required>
+                            <option value="">-- Select service --</option>
+                            <option value="Oil Change">Oil Change</option>
+                            <option value="Tire Rotation">Tire Rotation</option>
+                            <option value="Brake Service">Brake Service</option>
+                            <option value="Engine Diagnostic">Engine Diagnostic</option>
+                            <option value="Transmission Service">Transmission Service</option>
+                            <option value="Inspection">Inspection</option>
+                            <option value="Other">Other</option>
+                        </select>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label">Description</label>
+                        <label class="form-label fw-bold">Description</label>
                         <textarea class="form-control" id="editEventDescription" rows="3" placeholder="Additional notes or details..."></textarea>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Start Time</label>
-                        <input type="datetime-local" class="form-control" id="editEventStart" required>
-                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Start Time *</label>
+                            <input type="datetime-local" class="form-control" id="editEventStart" required>
+                        </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">End Time</label>
-                        <input type="datetime-local" class="form-control" id="editEventEnd" required>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">End Time *</label>
+                            <input type="datetime-local" class="form-control" id="editEventEnd" required>
+                        </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="deleteEventBtn" style="display: none;">Delete</button>
+                    <button type="button" class="btn btn-danger" id="deleteEventBtn" style="display: none;">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
                     <button type="button" class="btn-aios-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn-aios" id="saveEventBtn">Save Changes</button>
+                    <button type="button" class="btn-aios" id="saveEventBtn">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
                 </div>
             </div>
         </div>
@@ -144,24 +315,188 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
     <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let calendarEl = document.getElementById('calendar');
-            let editModal = new bootstrap.Modal(document.getElementById('editEventModal'));
+        // API URLs
+        const CUSTOMERS_API = 'https://localhost:7123/api/customers';
+        const APPOINTMENTS_API = 'https://localhost:7123/api/appointments';
 
-            let calendar = new FullCalendar.Calendar(calendarEl, {
+        let allCustomers = [];
+        let calendar;
+        let editModal;
+
+        // Toast notification functions
+        function showToast(type, message) {
+            const toastElement = document.getElementById(`${type}Toast`);
+            const messageElement = document.getElementById(`${type}Message`);
+
+            messageElement.textContent = message;
+
+            const toast = new bootstrap.Toast(toastElement, {
+                autohide: true,
+                delay: 2000
+            });
+
+            toast.show();
+        }
+
+        function showSuccess(message) {
+            showToast('success', message);
+        }
+
+        function showError(message) {
+            showToast('error', message);
+        }
+
+        function showWarning(message) {
+            showToast('warning', message);
+        }
+
+        // Confirmation dialog with modern styling
+        function confirmDelete() {
+            return new Promise((resolve) => {
+                const overlay = document.getElementById('confirmOverlay');
+                const yesBtn = document.getElementById('confirmYes');
+                const noBtn = document.getElementById('confirmNo');
+
+                overlay.style.display = 'flex';
+
+                const handleYes = () => {
+                    overlay.style.display = 'none';
+                    cleanup();
+                    resolve(true);
+                };
+
+                const handleNo = () => {
+                    overlay.style.display = 'none';
+                    cleanup();
+                    resolve(false);
+                };
+
+                const cleanup = () => {
+                    yesBtn.removeEventListener('click', handleYes);
+                    noBtn.removeEventListener('click', handleNo);
+                    overlay.removeEventListener('click', handleOverlayClick);
+                };
+
+                const handleOverlayClick = (e) => {
+                    if (e.target === overlay) {
+                        handleNo();
+                    }
+                };
+
+                yesBtn.addEventListener('click', handleYes);
+                noBtn.addEventListener('click', handleNo);
+                overlay.addEventListener('click', handleOverlayClick);
+            });
+        }
+
+        // Load customers from database
+        async function loadCustomers() {
+            try {
+                const response = await fetch(CUSTOMERS_API);
+                if (!response.ok) throw new Error('Failed to load customers');
+
+                allCustomers = await response.json();
+                populateCustomerDropdown();
+            } catch (error) {
+                console.error('Error loading customers:', error);
+                showError('Failed to load customers. Please refresh the page.');
+            }
+        }
+
+        // Populate customer dropdown
+        function populateCustomerDropdown() {
+            const select = document.getElementById('editEventCustomer');
+            select.innerHTML = '<option value="">-- Select a customer --</option>';
+
+            allCustomers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer.id;
+                option.textContent = `${customer.name} - ${customer.vehicle}`;
+                option.dataset.email = customer.email;
+                option.dataset.phone = customer.phone;
+                option.dataset.vehicle = customer.vehicle;
+                option.dataset.vin = customer.vin;
+                select.appendChild(option);
+            });
+        }
+
+        // Show customer details when selected
+        document.addEventListener('DOMContentLoaded', function() {
+            const customerSelect = document.getElementById('editEventCustomer');
+            customerSelect.addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const detailsDiv = document.getElementById('selectedCustomerInfo');
+                const detailsSpan = document.getElementById('customerDetails');
+
+                if (this.value) {
+                    const email = selectedOption.dataset.email;
+                    const phone = selectedOption.dataset.phone;
+                    const vehicle = selectedOption.dataset.vehicle;
+
+                    detailsSpan.innerHTML = `
+                        Email: ${email}<br>
+                        Phone: ${phone}<br>
+                        Vehicle: ${vehicle}
+                    `;
+                    detailsDiv.style.display = 'block';
+                } else {
+                    detailsDiv.style.display = 'none';
+                }
+            });
+        });
+
+        // Load appointments from database
+        async function loadAppointments() {
+            try {
+                const response = await fetch(APPOINTMENTS_API);
+                if (!response.ok) throw new Error('Failed to load appointments');
+
+                const appointments = await response.json();
+
+                // Clear existing events
+                calendar.removeAllEvents();
+
+                // Add appointments to calendar
+                appointments.forEach(apt => {
+                    calendar.addEvent({
+                        id: apt.id,
+                        title: `${apt.customerName} - ${apt.serviceType}`,
+                        start: apt.start,
+                        end: apt.end,
+                        backgroundColor: apt.backgroundColor,
+                        borderColor: apt.backgroundColor,
+                        extendedProps: {
+                            customerId: apt.customerId,
+                            customerName: apt.customerName,
+                            serviceType: apt.serviceType,
+                            description: apt.description
+                        }
+                    });
+                });
+            } catch (error) {
+                console.error('Error loading appointments:', error);
+            }
+        }
+
+        // Initialize calendar
+        document.addEventListener('DOMContentLoaded', async function () {
+            let calendarEl = document.getElementById('calendar');
+            editModal = new bootstrap.Modal(document.getElementById('editEventModal'));
+
+            // Load customers first
+            await loadCustomers();
+
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek',
                 height: 750,
                 selectable: true,
                 editable: true,
-
                 slotMinTime: "08:00:00",
                 slotMaxTime: "17:00:00",
-
                 allDaySlot: false,
 
                 headerToolbar: {
@@ -171,97 +506,36 @@
                 },
 
                 select: function (info) {
-                    // Fixed business hours validation
-                    if (info.start.getHours() < 8 ||
-                        info.end.getHours() > 17 ||
+                    if (info.start.getHours() < 8 || info.end.getHours() > 17 ||
                         (info.end.getHours() === 17 && info.end.getMinutes() > 0)) {
-                        alert("Appointments must be between 8 AM and 5 PM.");
+                        showWarning("Appointments must be between 8 AM and 5 PM.");
                         return;
                     }
 
-                    // Open modal for creating appointment
-                    let startLocal = new Date(info.start.getTime() - info.start.getTimezoneOffset() * 60000);
-                    let endLocal = new Date(info.end.getTime() - info.end.getTimezoneOffset() * 60000);
-
-                    document.getElementById("editEventId").value = '';
-                    document.getElementById("editEventCustomer").value = '';
-                    document.getElementById("editEventTitle").value = '';
-                    document.getElementById("editEventDescription").value = '';
-                    document.getElementById("editEventStart").value = startLocal.toISOString().slice(0, 16);
-                    document.getElementById("editEventEnd").value = endLocal.toISOString().slice(0, 16);
-
-                    document.getElementById("modalTitle").textContent = "Create Appointment";
-                    document.getElementById("deleteEventBtn").style.display = "none";
-                    document.getElementById("saveEventBtn").textContent = "Create";
-
-                    editModal.show();
+                    openCreateModal(info.start, info.end);
                     calendar.unselect();
                 },
 
                 eventClick: function (info) {
-                    let event = info.event;
-
-                    // Fill modal fields
-                    document.getElementById("editEventId").value = event.id;
-                    document.getElementById("editEventCustomer").value = event.extendedProps.customer || '';
-                    document.getElementById("editEventTitle").value = event.title;
-                    document.getElementById("editEventDescription").value = event.extendedProps.description || '';
-
-                    // Convert to local time properly
-                    let startDate = new Date(event.start.getTime() - event.start.getTimezoneOffset() * 60000);
-                    let endDate = event.end ? new Date(event.end.getTime() - event.end.getTimezoneOffset() * 60000) : startDate;
-
-                    document.getElementById("editEventStart").value = startDate.toISOString().slice(0, 16);
-                    document.getElementById("editEventEnd").value = endDate.toISOString().slice(0, 16);
-
-                    document.getElementById("modalTitle").textContent = "Edit Appointment";
-                    document.getElementById("deleteEventBtn").style.display = "inline-block";
-                    document.getElementById("saveEventBtn").textContent = "Save Changes";
-
-                    editModal.show();
+                    openEditModal(info.event);
                 },
 
-                eventResize: function (info) {
-                    let end = info.event.end || info.event.start;
-                    if (info.event.start.getHours() < 8 ||
-                        end.getHours() > 17 ||
-                        (end.getHours() === 17 && end.getMinutes() > 0)) {
-                        alert("Resize must stay between 8 AM and 5 PM.");
-                        info.revert();
-                    }
+                eventResize: async function (info) {
+                    await updateAppointmentTime(info.event);
                 },
 
-                eventDrop: function (info) {
-                    let end = info.event.end || info.event.start;
-                    if (info.event.start.getHours() < 8 ||
-                        end.getHours() > 17 ||
-                        (end.getHours() === 17 && end.getMinutes() > 0)) {
-                        alert("Appointments must stay between 8 AM and 5 PM.");
-                        info.revert();
-                    }
-                },
-
-                events: [
-                    {
-                        id: '1',
-                        title: "Oil Change",
-                        start: new Date().toISOString().split("T")[0] + "T10:00",
-                        end: new Date().toISOString().split("T")[0] + "T11:00",
-                        backgroundColor: "#4da3ff",
-                        borderColor: "#4da3ff",
-                        extendedProps: {
-                            customer: "Sarah Lopez",
-                            description: "Regular oil change and filter replacement"
-                        }
-                    }
-                ]
+                eventDrop: async function (info) {
+                    await updateAppointmentTime(info.event);
+                }
             });
 
             calendar.render();
 
-            // Create new appointment button
+            // Load appointments from database
+            await loadAppointments();
+
+            // Create appointment button
             document.getElementById("createAppointmentBtn").onclick = function () {
-                // Set default times (next hour, 1 hour duration)
                 let now = new Date();
                 now.setMinutes(0, 0, 0);
                 now.setHours(now.getHours() + 1);
@@ -270,7 +544,6 @@
                 let end = new Date(now);
                 end.setHours(end.getHours() + 1);
 
-                // Ensure within business hours
                 if (start.getHours() < 8) {
                     start.setHours(8, 0, 0, 0);
                     end.setHours(9, 0, 0, 0);
@@ -279,94 +552,165 @@
                     end.setHours(17, 0, 0, 0);
                 }
 
-                let startLocal = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
-                let endLocal = new Date(end.getTime() - end.getTimezoneOffset() * 60000);
-
-                document.getElementById("editEventId").value = '';
-                document.getElementById("editEventCustomer").value = '';
-                document.getElementById("editEventTitle").value = '';
-                document.getElementById("editEventDescription").value = '';
-                document.getElementById("editEventStart").value = startLocal.toISOString().slice(0, 16);
-                document.getElementById("editEventEnd").value = endLocal.toISOString().slice(0, 16);
-
-                document.getElementById("modalTitle").textContent = "Create Appointment";
-                document.getElementById("deleteEventBtn").style.display = "none";
-                document.getElementById("saveEventBtn").textContent = "Create";
-
-                editModal.show();
+                openCreateModal(start, end);
             };
 
-            // Save changes from modal
-            document.getElementById("saveEventBtn").onclick = function () {
-                let id = document.getElementById("editEventId").value;
-                let customer = document.getElementById("editEventCustomer").value;
-                let title = document.getElementById("editEventTitle").value;
-                let description = document.getElementById("editEventDescription").value;
-                let start = document.getElementById("editEventStart").value;
-                let end = document.getElementById("editEventEnd").value;
+            // Save button
+            document.getElementById("saveEventBtn").onclick = saveAppointment;
 
-                if (!customer || !title || !start || !end) {
-                    alert("Please fill in all required fields.");
-                    return;
-                }
+            // Delete button
+            document.getElementById("deleteEventBtn").onclick = deleteAppointment;
+        });
 
-                // Fixed business hours validation
-                let startDate = new Date(start);
-                let endDate = new Date(end);
+        function openCreateModal(start, end) {
+            let startLocal = new Date(start.getTime() - start.getTimezoneOffset() * 60000);
+            let endLocal = new Date(end.getTime() - end.getTimezoneOffset() * 60000);
 
-                if (startDate.getHours() < 8 ||
-                    endDate.getHours() > 17 ||
-                    (endDate.getHours() === 17 && endDate.getMinutes() > 0)) {
-                    alert("Appointments must be between 8 AM and 5 PM.");
-                    return;
-                }
+            document.getElementById("editEventId").value = '';
+            document.getElementById("editEventCustomer").value = '';
+            document.getElementById("editEventTitle").value = '';
+            document.getElementById("editEventDescription").value = '';
+            document.getElementById("editEventStart").value = startLocal.toISOString().slice(0, 16);
+            document.getElementById("editEventEnd").value = endLocal.toISOString().slice(0, 16);
+            document.getElementById("selectedCustomerInfo").style.display = 'none';
 
-                if (startDate >= endDate) {
-                    alert("End time must be after start time.");
-                    return;
-                }
+            document.getElementById("modalTitle").textContent = "Create Appointment";
+            document.getElementById("deleteEventBtn").style.display = "none";
+            document.getElementById("saveEventBtn").innerHTML = '<i class="bi bi-save"></i> Create';
 
+            editModal.show();
+        }
+
+        function openEditModal(event) {
+            document.getElementById("editEventId").value = event.id;
+            document.getElementById("editEventCustomer").value = event.extendedProps.customerId;
+            document.getElementById("editEventTitle").value = event.extendedProps.serviceType;
+            document.getElementById("editEventDescription").value = event.extendedProps.description || '';
+
+            let startDate = new Date(event.start.getTime() - event.start.getTimezoneOffset() * 60000);
+            let endDate = event.end ? new Date(event.end.getTime() - event.end.getTimezoneOffset() * 60000) : startDate;
+
+            document.getElementById("editEventStart").value = startDate.toISOString().slice(0, 16);
+            document.getElementById("editEventEnd").value = endDate.toISOString().slice(0, 16);
+
+            // Trigger customer selection to show details
+            document.getElementById("editEventCustomer").dispatchEvent(new Event('change'));
+
+            document.getElementById("modalTitle").textContent = "Edit Appointment";
+            document.getElementById("deleteEventBtn").style.display = "inline-block";
+            document.getElementById("saveEventBtn").innerHTML = '<i class="bi bi-save"></i> Save Changes';
+
+            editModal.show();
+        }
+
+        async function saveAppointment() {
+            const id = document.getElementById("editEventId").value;
+            const customerId = document.getElementById("editEventCustomer").value;
+            const serviceType = document.getElementById("editEventTitle").value;
+            const description = document.getElementById("editEventDescription").value;
+            const start = document.getElementById("editEventStart").value;
+            const end = document.getElementById("editEventEnd").value;
+
+            if (!customerId || !serviceType || !start || !end) {
+                showWarning("Please fill in all required fields.");
+                return;
+            }
+
+            const customer = allCustomers.find(c => c.id === customerId);
+            if (!customer) {
+                showError("Customer not found.");
+                return;
+            }
+
+            const appointment = {
+                customerId: customerId,
+                customerName: customer.name,
+                serviceType: serviceType,
+                description: description,
+                start: new Date(start).toISOString(),
+                end: new Date(end).toISOString(),
+                backgroundColor: "#4da3ff"
+            };
+
+            try {
+                let response;
                 if (id) {
-                    // Edit existing event
-                    let event = calendar.getEventById(id);
-                    if (!event) {
-                        alert("Event not found.");
-                        return;
-                    }
-                    event.setProp("title", title);
-                    event.setStart(start);
-                    event.setEnd(end);
-                    event.setExtendedProp("customer", customer);
-                    event.setExtendedProp("description", description);
+                    // Update existing
+                    response = await fetch(`${APPOINTMENTS_API}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(appointment)
+                    });
                 } else {
-                    // Create new event
-                    calendar.addEvent({
-                        id: Date.now().toString(),
-                        title: title,
-                        start: start,
-                        end: end,
-                        extendedProps: {
-                            customer: customer,
-                            description: description
-                        }
+                    // Create new
+                    response = await fetch(APPOINTMENTS_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(appointment)
                     });
                 }
 
+                if (!response.ok) throw new Error('Failed to save appointment');
+
                 editModal.hide();
+                await loadAppointments();
+                showSuccess(id ? 'Appointment updated successfully!' : 'Appointment created successfully!');
+            } catch (error) {
+                console.error('Error saving appointment:', error);
+                showError('Failed to save appointment. Please try again.');
+            }
+        }
+
+        async function deleteAppointment() {
+            const confirmed = await confirmDelete();
+            if (!confirmed) return;
+
+            const id = document.getElementById("editEventId").value;
+
+            try {
+                const response = await fetch(`${APPOINTMENTS_API}/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) throw new Error('Failed to delete appointment');
+
+                editModal.hide();
+                await loadAppointments();
+                showSuccess('Appointment deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting appointment:', error);
+                showError('Failed to delete appointment. Please try again.');
+            }
+        }
+
+        async function updateAppointmentTime(event) {
+            const customer = allCustomers.find(c => c.id === event.extendedProps.customerId);
+
+            const appointment = {
+                customerId: event.extendedProps.customerId,
+                customerName: event.extendedProps.customerName,
+                serviceType: event.extendedProps.serviceType,
+                description: event.extendedProps.description,
+                start: event.start.toISOString(),
+                end: event.end.toISOString(),
+                backgroundColor: event.backgroundColor
             };
 
-            // Delete event
-            document.getElementById("deleteEventBtn").onclick = function () {
-                if (confirm("Delete this appointment?")) {
-                    let id = document.getElementById("editEventId").value;
-                    let event = calendar.getEventById(id);
-                    if (event) {
-                        event.remove();
-                    }
-                    editModal.hide();
-                }
-            };
-        });
+            try {
+                const response = await fetch(`${APPOINTMENTS_API}/${event.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(appointment)
+                });
+
+                if (!response.ok) throw new Error('Failed to update appointment');
+                showSuccess('Appointment time updated!');
+            } catch (error) {
+                console.error('Error updating appointment:', error);
+                showError('Failed to update appointment time.');
+                await loadAppointments();
+            }
+        }
     </script>
 </body>
 </html>
