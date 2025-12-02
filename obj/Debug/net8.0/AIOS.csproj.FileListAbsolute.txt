@@ -64,3 +64,16 @@ C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\refint\AIOS.dll
 C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.pdb
 C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.genruntimeconfig.cache
 C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\ref\AIOS.dll
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.AssemblyInfoInputs.cache
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.AssemblyInfo.cs
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.csproj.CoreCompileInputs.cache
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.MvcApplicationPartsAssemblyInfo.cache
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.RazorAssemblyInfo.cache
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.RazorAssemblyInfo.cs
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.sourcelink.json
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.dll
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\refint\AIOS.dll
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.pdb
+C:\Desktop\Classes\AIOS\obj\Debug\net8.0\AIOS.csproj.AssemblyReference.cache
