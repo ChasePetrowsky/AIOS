@@ -1,5 +1,6 @@
 using AIOS.Configuration;
 using AIOS.Repositories;
+using AIOS.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,9 @@ builder.Services.AddControllersWithViews()
 // Configure MongoDB settings from appsettings.json
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("MongoDbSettings"));
+
+builder.Services.AddSingleton<NewsletterRepository>();
+
 
 // Register Customer Repository as Singleton
 builder.Services.AddSingleton<CustomerRepository>();
