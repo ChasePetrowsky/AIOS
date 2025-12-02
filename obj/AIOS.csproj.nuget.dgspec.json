@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Chase\\Desktop\\AISO BackUp\\AIOS\\AIOS.csproj": {}
+    "C:\\Desktop\\Classes\\AIOS\\AIOS.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Chase\\Desktop\\AISO BackUp\\AIOS\\AIOS.csproj": {
+    "C:\\Desktop\\Classes\\AIOS\\AIOS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Chase\\Desktop\\AISO BackUp\\AIOS\\AIOS.csproj",
+        "projectUniqueName": "C:\\Desktop\\Classes\\AIOS\\AIOS.csproj",
         "projectName": "AIOS",
-        "projectPath": "C:\\Users\\Chase\\Desktop\\AISO BackUp\\AIOS\\AIOS.csproj",
-        "packagesPath": "C:\\Users\\Chase\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Chase\\Desktop\\AISO BackUp\\AIOS\\obj\\",
+        "projectPath": "C:\\Desktop\\Classes\\AIOS\\AIOS.csproj",
+        "packagesPath": "C:\\Users\\ahmed\\.nuget\\packages\\",
+        "outputPath": "C:\\Desktop\\Classes\\AIOS\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Chase\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ahmed\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -50,6 +50,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.5.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
