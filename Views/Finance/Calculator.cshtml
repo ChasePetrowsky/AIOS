@@ -1,0 +1,81 @@
+@model AIOS.Models.FinanceCalculation
+@{
+    ViewData["Title"] = "Finance Calculator";
+}
+
+<h2 class="page-title">Finance Calculator</h2>
+
+<div class="aios-card fade-in">
+    <form asp-action="Calculator" method="post">
+        
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="VehiclePrice">Vehicle Price</label>
+                <input asp-for="VehiclePrice" class="aios-input" type="number" step="0.01" min="0.01" />
+                <span asp-validation-for="VehiclePrice" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="CreditScore">Credit Score</label>
+                <input asp-for="CreditScore" class="aios-input" type="number" min="300" max="850" />
+                <span asp-validation-for="CreditScore" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="LoanTerm">Loan Term</label>
+                <input asp-for="LoanTerm" class="aios-input" type="number" min="1" />
+                <span asp-validation-for="LoanTerm" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="TermUnit">Term Unit</label>
+                <select asp-for="TermUnit" class="aios-input">
+                    <option value="Months">Months</option>
+                    <option value="Years">Years</option>
+                </select>
+                <span asp-validation-for="TermUnit" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="DownPayment">Down Payment (Optional)</label>
+                <input asp-for="DownPayment" class="aios-input" type="number" step="0.01" min="0" />
+                <span asp-validation-for="DownPayment" class="text-danger"></span>
+            </div>
+
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn-aios">Calculate</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+@if (Model != null && Model.MonthlyPayment > 0)
+{
+    <div class="aios-card fade-in mt-4">
+        <h3 class="page-title" style="font-size: 1.3rem; margin-bottom: 15px;">Calculation Results</h3>
+        
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-title">Interest Rate</div>
+                    <div class="stat-value" style="font-size: 1.8rem;">@Model.InterestRate.ToString("F2")%</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-title">Monthly Payment</div>
+                    <div class="stat-value" style="font-size: 1.8rem;">@Model.MonthlyPayment.ToString("C")</div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-title">Total Amount Paid</div>
+                    <div class="stat-value" style="font-size: 1.8rem;">@Model.TotalPaid.ToString("C")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

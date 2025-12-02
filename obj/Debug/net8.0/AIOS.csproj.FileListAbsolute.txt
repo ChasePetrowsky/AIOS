@@ -31,3 +31,36 @@ C:\Desktop\Classes\C# Net\AIOS\obj\Debug\net8.0\refint\AIOS.dll
 C:\Desktop\Classes\C# Net\AIOS\obj\Debug\net8.0\AIOS.pdb
 C:\Desktop\Classes\C# Net\AIOS\obj\Debug\net8.0\AIOS.genruntimeconfig.cache
 C:\Desktop\Classes\C# Net\AIOS\obj\Debug\net8.0\ref\AIOS.dll
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\appsettings.Development.json
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\appsettings.json
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.staticwebassets.runtime.json
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.staticwebassets.endpoints.json
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.exe
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.deps.json
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.runtimeconfig.json
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.dll
+C:\Users\Chase\Source\Repos\AIOS\bin\Debug\net8.0\AIOS.pdb
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.AssemblyInfoInputs.cache
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.AssemblyInfo.cs
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.csproj.CoreCompileInputs.cache
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.RazorAssemblyInfo.cache
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.RazorAssemblyInfo.cs
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\rjimswa.dswa.cache.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\scopedcss\bundle\AIOS.styles.css
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\scopedcss\projectbundle\AIOS.bundle.scp.css
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\staticwebassets.build.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\staticwebassets.build.json.cache
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\staticwebassets.development.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.dll
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\refint\AIOS.dll
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.pdb
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\AIOS.genruntimeconfig.cache
+C:\Users\Chase\Source\Repos\AIOS\obj\Debug\net8.0\ref\AIOS.dll
