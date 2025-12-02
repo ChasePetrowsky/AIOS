@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AIOS")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63cc443d036c2d633299b06dd0441c9901e44cfb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6c8d3d52ace76aaa8e14148c3cad4120d522f61a")]
 [assembly: System.Reflection.AssemblyProductAttribute("AIOS")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AIOS")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
