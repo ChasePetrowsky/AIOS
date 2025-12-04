@@ -4,16 +4,181 @@
 
 <h2 class="page-title">Smart Pricing Suggestions</h2>
 
-<div class="aios-card fade-in">
+<div class="aios-card fade-in modern-card">
 
-    <h4 class="fw-bold">2020 Honda Civic</h4>
+    <h3 class="section-title">AI Vehicle Value Estimator</h3>
 
-    <p><strong>Market Average:</strong> $20,800</p>
-    <p><strong>AI Suggested Price:</strong> $21,200</p>
+    <div class="input-grid">
+        <div class="input-group">
+            <label>Year</label>
+            <input id="year" class="modern-input" placeholder="e.g. 2020" />
+        </div>
 
-    <hr>
+        <div class="input-group">
+            <label>Make</label>
+            <input id="make" class="modern-input" placeholder="e.g. Honda" />
+        </div>
 
-    <button class="btn-aios">Apply Suggested Price</button>
-    <a href="/Inventory" class="btn-aios-secondary ms-1">Back</a>
+        <div class="input-group">
+            <label>Model</label>
+            <input id="model" class="modern-input" placeholder="e.g. Civic" />
+        </div>
+
+        <div class="input-group">
+            <label>Mileage (km)</label>
+            <input id="mileage" class="modern-input" placeholder="e.g. 85000" />
+        </div>
+    </div>
+
+    <div class="button-row">
+        <button class="modern-btn" onclick="estimatePrice()">Estimate Price</button>
+        <a href="/Inventory" class="modern-btn-secondary">Back</a>
+    </div>
+
+    <div class="result-box">
+        <h5>AI Suggested Value</h5>
+        <p id="aiResult" class="result-text">—</p>
+    </div>
 
 </div>
+
+<script>
+    async function estimatePrice() {
+        document.getElementById("aiResult").innerText = "Estimating...";
+
+        const payload = {
+            year: document.getElementById("year").value,
+            make: document.getElementById("make").value,
+            model: document.getElementById("model").value,
+            mileage: document.getElementById("mileage").value
+        };
+
+        const res = await fetch('/api/ai-pricing/estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        let price = data.price;
+
+        // Format the price: add $, insert commas, remove weird characters
+        if (price) {
+            price = price.replace(/[^\d]/g, "");  // keep only numbers
+            price = Number(price).toLocaleString("en-US"); // format with commas
+            document.getElementById("aiResult").innerText = "$" + price;
+        } else {
+            document.getElementById("aiResult").innerText = "Error retrieving value";
+        }
+    }
+</script>
+
+<style>
+    /* CARD FIX — Prevent shrinking */
+    .modern-card {
+        padding: 30px;
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e6e6e6;
+        width: 100%;
+        max-width: 900px; /* keeps layout wide & clean */
+        margin: 0 auto; /* centers the card */
+    }
+
+    .section-title {
+        margin-bottom: 25px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    /* FIXED INPUT GRID SPACING */
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(260px, 1fr)); /* prevents touching */
+        gap: 32px; /* more spacing */
+        margin-bottom: 30px;
+        width: 100%;
+    }
+
+    .input-group label {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .modern-input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 1px solid #c6c6c6;
+        font-size: 1rem;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .modern-input:focus {
+            border-color: #4c8bf5;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(76, 139, 245, 0.2);
+        }
+
+    .button-row {
+        margin-top: 10px;
+        display: flex;
+        gap: 12px;
+    }
+
+    .modern-btn {
+        padding: 12px 22px;
+        border-radius: 10px;
+        border: none;
+        font-size: 1rem;
+        color: white;
+        background: linear-gradient(135deg, #4c8bf5, #1c5ed6);
+        cursor: pointer;
+        transition: all 0.25s ease;
+        font-weight: 600;
+    }
+
+        .modern-btn:hover {
+            background: linear-gradient(135deg, #5c99ff, #2c6cf0);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(70, 130, 240, 0.3);
+        }
+
+    .modern-btn-secondary {
+        padding: 12px 22px;
+        border-radius: 10px;
+        border: 1px solid #bbb;
+        background: #f7f7f7;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #444;
+        text-decoration: none;
+        transition: all 0.25s ease;
+    }
+
+        .modern-btn-secondary:hover {
+            background: #ededed;
+            border-color: #999;
+            transform: translateY(-2px);
+        }
+
+    .result-box {
+        margin-top: 30px;
+        padding: 18px;
+        border-radius: 12px;
+        background: #f1f5ff;
+        border-left: 4px solid #4c8bf5;
+    }
+
+    .result-text {
+        margin-top: 6px;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #1c3d8a;
+    }
+</style>
