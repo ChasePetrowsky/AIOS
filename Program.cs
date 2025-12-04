@@ -44,6 +44,9 @@ builder.Services.Configure<MongoDbSettings>(
 // Register Customer Repository as Singleton
 builder.Services.AddSingleton<CustomerRepository>();
 
+builder.Services.AddSingleton<AiPricingRepository>();
+
+
 // Add CORS policy to allow frontend requests
 builder.Services.AddCors(options =>
 {
@@ -77,6 +80,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
