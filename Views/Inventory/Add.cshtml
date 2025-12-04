@@ -1,0 +1,102 @@
+﻿@model AIOS.Models.Vehicle
+
+@{
+    ViewData["Title"] = "Add Vehicle";
+}
+
+<h2 class="page-title">Add Vehicle</h2>
+
+<div class="aios-card fade-in modern-card">
+
+    <form asp-action="Add" asp-controller="Inventory" method="post" enctype="multipart/form-data">
+
+        <div class="input-grid">
+            <div class="input-group">
+                <label>Make</label>
+                <input asp-for="Make" class="modern-input" placeholder="e.g. Honda" required />
+            </div>
+
+            <div class="input-group">
+                <label>Model</label>
+                <input asp-for="Model" class="modern-input" placeholder="e.g. Civic" required />
+            </div>
+
+            <div class="input-group">
+                <label>Year</label>
+                <input asp-for="Year" class="modern-input" type="number" placeholder="2020" required />
+            </div>
+
+            <div class="input-group">
+                <label>Mileage (KM)</label>
+                <input asp-for="Kms" class="modern-input" type="number" placeholder="85000" required />
+            </div>
+
+            <div class="input-group">
+                <label>VIN</label>
+                <input asp-for="VIN" class="modern-input" placeholder="2HGFC2F69LH012345" required />
+            </div>
+
+            <div class="input-group">
+                <label>Status</label>
+                <select asp-for="Status" class="modern-input">
+                    <option>In Stock</option>
+                    <option>Sold</option>
+                    <option>Pending</option>
+                    <option>Reserved</option>
+                </select>
+            </div>
+
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Vehicle Photo</label>
+                <input type="file" name="photo" class="modern-input" accept="image/*" required />
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="modern-btn">Save Vehicle</button>
+            <a href="/Inventory" class="modern-btn-secondary">Cancel</a>
+        </div>
+
+    </form>
+
+</div>
+
+<style>
+    .modern-card {
+        padding: 30px;
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e6e6e6;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+        gap: 32px;
+        margin-bottom: 30px;
+    }
+
+    .input-group label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .modern-input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 1px solid #c6c6c6;
+        font-size: 1rem;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 12px;
+    }
+</style>

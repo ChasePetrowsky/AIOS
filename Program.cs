@@ -44,6 +44,8 @@ builder.Services.Configure<MongoDbSettings>(
 // Register Customer Repository as Singleton
 builder.Services.AddSingleton<CustomerRepository>();
 
+builder.Services.AddSingleton<VehicleRepository>();
+
 builder.Services.AddSingleton<AiPricingRepository>();
 
 

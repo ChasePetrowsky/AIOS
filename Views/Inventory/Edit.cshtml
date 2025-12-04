@@ -1,0 +1,160 @@
+﻿@model AIOS.Models.Vehicle
+
+@{
+    ViewData["Title"] = "Edit Vehicle";
+}
+
+<h2 class="page-title">Edit Vehicle</h2>
+
+<div class="aios-card fade-in modern-card">
+
+    <form asp-action="Edit" asp-controller="Inventory" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="current-photo-box">
+            <p><strong>Current Photo</strong></p>
+            <img src="@Model.PhotoUrl" />
+        </div>
+
+        <div class="input-grid">
+
+            <div class="input-group">
+                <label>Make</label>
+                <input asp-for="Make" class="modern-input" />
+            </div>
+
+            <div class="input-group">
+                <label>Model</label>
+                <input asp-for="Model" class="modern-input" />
+            </div>
+
+            <div class="input-group">
+                <label>Year</label>
+                <input asp-for="Year" type="number" class="modern-input" />
+            </div>
+
+            <div class="input-group">
+                <label>KMs</label>
+                <input asp-for="Kms" type="number" class="modern-input" />
+            </div>
+
+            <div class="input-group">
+                <label>VIN</label>
+                <input asp-for="VIN" class="modern-input" />
+            </div>
+
+            <div class="input-group">
+                <label>Status</label>
+                <select asp-for="Status" class="modern-input">
+                    <option>In Stock</option>
+                    <option>Sold</option>
+                    <option>Pending</option>
+                    <option>Reserved</option>
+                </select>
+            </div>
+
+            <div class="input-group" style="grid-column: span 2;">
+                <label>Replace Photo</label>
+                <input type="file" name="newPhoto" class="modern-input" accept="image/*" />
+            </div>
+        </div>
+
+        <div class="button-row">
+            <button type="submit" class="modern-btn">Save Changes</button>
+            <a href="/Inventory/Details/@Model.Id" class="modern-btn-secondary">Cancel</a>
+        </div>
+
+    </form>
+</div>
+
+<!-- ALL CSS MUST BE BELOW THIS LINE -->
+<style>
+    .modern-card {
+        padding: 30px;
+        border-radius: 18px;
+        background: #ffffff;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+        border: 1px solid #e6e6e6;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto 40px auto;
+    }
+
+    .current-photo-box {
+        margin-bottom: 25px;
+    }
+
+        .current-photo-box img {
+            width: 230px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #ddd;
+        }
+
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(260px, 1fr));
+        gap: 30px 40px;
+        margin-bottom: 30px;
+    }
+
+    .input-group label {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .modern-input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 1px solid #c9c9c9;
+        background: #fafafa;
+        font-size: 1rem;
+    }
+
+        .modern-input:focus {
+            border-color: #4c8bf5;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76,139,245,0.2);
+            background: white;
+        }
+
+    .button-row {
+        display: flex;
+        gap: 12px;
+    }
+
+    .modern-btn {
+        padding: 12px 22px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #4c8bf5, #1c5ed6);
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .modern-btn-secondary {
+        padding: 12px 22px;
+        border-radius: 10px;
+        background: #f4f4f4;
+        border: 1px solid #c8c8c8;
+        font-weight: 600;
+    }
+
+    @@media (max-width: 700px) {
+        .input-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .current-photo-box img {
+        width: 100%;
+        height: auto;
+    }
+
+    }
+</style>
