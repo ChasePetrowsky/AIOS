@@ -1,49 +1,214 @@
 ﻿@{
-    ViewData["Title"] = "Sales Dashboard";
+    ViewData["Title"] = "AI Trade-In Estimator";
 }
 
-<h2 class="page-title">Sales Dashboard - currently hardcoded - need api</h2>
+<h2 class="page-title">AI Trade-In Offer Estimator</h2>
 
-<div class="dashboard-row">
+<div class="tradein-card fade-in">
 
-    <div class="stat-card">
-        <div class="stat-title">Total Sales This Month</div>
-        <div class="stat-value">18</div>
+    <div class="input-grid">
+
+        <div class="input-group">
+            <label>Year</label>
+            <input id="year" class="modern-input" type="number" placeholder="2017" required />
+        </div>
+
+        <div class="input-group">
+            <label>Make</label>
+            <input id="make" class="modern-input" placeholder="Honda" required />
+        </div>
+
+        <div class="input-group">
+            <label>Model</label>
+            <input id="model" class="modern-input" placeholder="Civic" required />
+        </div>
+
+        <div class="input-group">
+            <label>Mileage (KM)</label>
+            <input id="mileage" class="modern-input" type="number" placeholder="120000" required />
+        </div>
+
+        <div class="input-group full">
+            <label>Condition</label>
+            <select id="condition" class="modern-input">
+                <option>Excellent</option>
+                <option>Good</option>
+                <option>Fair</option>
+                <option>Poor</option>
+            </select>
+        </div>
+
+        <div class="input-group full">
+            <label>Notes (Optional)</label>
+            <textarea id="notes" class="modern-input textarea" rows="3" placeholder="Scratches, accident history, trim level..."></textarea>
+        </div>
+
     </div>
 
-    <div class="stat-card">
-        <div class="stat-title">Active Leads</div>
-        <div class="stat-value">56</div>
-    </div>
+    <button class="modern-btn" onclick="estimateTradeIn()">Estimate Trade-In Value</button>
 
-    <div class="stat-card">
-        <div class="stat-title">Top Model</div>
-        <div class="stat-value">Civic</div>
+    <div class="output-card">
+        <h4 class="output-title">AI Trade-In Estimate</h4>
+        <pre id="aiResult" class="ai-output">Awaiting input...</pre>
     </div>
 
 </div>
-
-<div class="aios-card mt-4">
-    <h4 class="fw-bold mb-3">Monthly Sales Trend</h4>
-
-    <canvas id="salesChart" height="120"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-    const ctx = document.getElementById("salesChart");
+    async function estimateTradeIn() {
+        const payload = {
+            year: parseInt(document.getElementById("year").value),
+            make: document.getElementById("make").value,
+            model: document.getElementById("model").value,
+            mileage: parseInt(document.getElementById("mileage").value),
+            condition: document.getElementById("condition").value,
+            notes: document.getElementById("notes").value
+        };
 
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-            datasets: [{
-                label: "Vehicle Sales",
-                data: [12, 17, 9, 22, 18, 25],
-                borderWidth: 3,
-                tension: 0.3
-            }]
-        }
-    });
+        const res = await fetch('/api/ai/tradein/estimate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        document.getElementById("aiResult").innerText =
+            data.estimate || "Error retrieving estimate.";
+    }
 </script>
+
+<style>
+
+    /* Card Container */
+    .tradein-card {
+        padding: 35px;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        border: 1px solid #e5e7eb;
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    /* Grid */
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 28px;
+        margin-bottom: 30px;
+    }
+
+    .full {
+        grid-column: span 2;
+    }
+
+    /* Input groups */
+    .input-group label {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #374151;
+        display: block;
+    }
+
+    /* Inputs */
+    .modern-input {
+        width: 100%;
+        padding: 14px 16px;
+        border-radius: 10px;
+        border: 1px solid #d1d5db;
+        background: #f9fafb;
+        font-size: 1rem;
+        transition: 0.2s ease-in-out;
+    }
+
+        .modern-input:focus,
+        .modern-input:hover {
+            background: white;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .2);
+            outline: none;
+        }
+
+    .textarea {
+        resize: none;
+    }
+
+    /* Button */
+    .modern-btn {
+        width: 100%;
+        padding: 15px;
+        border-radius: 12px;
+        background: #2563eb;
+        color: white;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: .25s ease;
+        margin-top: 5px;
+    }
+
+        .modern-btn:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0,0,0,.12);
+        }
+
+    /* Output Box */
+    .output-card {
+        margin-top: 30px;
+        padding: 20px;
+        border-radius: 15px;
+        background: #f8fafc;
+        border: 1px solid #dbeafe;
+    }
+
+    .output-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: #1e293b;
+    }
+
+    .ai-output {
+        white-space: pre-wrap;
+        padding: 15px;
+        font-size: 1rem;
+        background: #eef2ff;
+        border-radius: 10px;
+        border: 1px solid #c7d2fe;
+        font-family: Consolas, monospace;
+    }
+
+    /* Animation */
+    @@keyframes fadeUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .fade-in {
+        animation: fadeUp 0.35s ease-out;
+    }
+
+    /* Mobile */
+    @@media (max-width: 700px) {
+        .input-grid
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    }
+</style>
